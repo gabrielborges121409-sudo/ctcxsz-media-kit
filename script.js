@@ -1,19 +1,42 @@
 /**
- * Script Principal - Página Oficial & Media Kit ctcxsz
- * Funcionalidades:
- * 1. Controle do menu mobile responsivo
- * 2. Alternância entre abas de Setup (In-Game vs Hardware)
- * 3. Cópia rápida das configurações de Fortnite com feedback visual
- * 4. Atualização automática do ano no rodapé
+ * Script Principal — Media Kit ctcxsz
+ *
+ * 1. Navbar: classe "scrolled" ao rolar + animação do hamburguer
+ * 2. Menu mobile: toggle + fecha ao clicar em link
+ * 3. Sistema de abas (Setup)
+ * 4. Copiar configurações in-game com feedback visual
+ * 5. Ano dinâmico no rodapé
+ * 6. Animação de entrada com IntersectionObserver (fade-in das seções)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+
   // =========================================================================
-  // 1. MENU MOBILE
+  // 1. NAVBAR — classe "scrolled" ao rolar a página
+  // =========================================================================
+  const navbar = document.querySelector('.navbar');
+
+  const handleScroll = () => {
+    if (navbar) {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll(); // aplica no carregamento caso já tenha rolado
+
+  // =========================================================================
+  // 2. MENU MOBILE
   // =========================================================================
   const menuToggle = document.getElementById('menuToggle');
-  const navMenu = document.getElementById('navMenu');
-  const navLinks = document.querySelectorAll('.nav-link, .nav-cta');
+  const navMenu    = document.getElementById('navMenu');
+  const navLinks   = document.querySelectorAll('.nav-link, .nav-cta');
+
+  const closeMenu = () => {
+    if (!navMenu || !menuToggle) return;
+    navMenu.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  };
 
   if (menuToggle && navMenu) {
     menuToggle.addEventListener('click', () => {
@@ -21,118 +44,154 @@ document.addEventListener('DOMContentLoaded', () => {
       menuToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // Fecha o menu automaticamente ao clicar em qualquer link
-    navLinks.forEach((link) => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-      });
+    navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Fecha com Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Fecha ao clicar fora do menu
+    document.addEventListener('click', e => {
+      if (
+        navMenu.classList.contains('open') &&
+        !navMenu.contains(e.target) &&
+        !menuToggle.contains(e.target)
+      ) {
+        closeMenu();
+      }
     });
   }
 
   // =========================================================================
-  // 2. SISTEMA DE ABAS (SETUP & CONFIGURAÇÕES)
+  // 3. SISTEMA DE ABAS (Setup)
   // =========================================================================
   const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabPanels = document.querySelectorAll('.tab-panel');
+  const tabPanels  = document.querySelectorAll('.tab-panel');
 
-  tabButtons.forEach((button) => {
+  tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       const targetId = button.getAttribute('data-tab');
 
-      // Reseta estado ativo de todos os botões
-      tabButtons.forEach((btn) => {
+      tabButtons.forEach(btn => {
         btn.classList.remove('active');
         btn.setAttribute('aria-selected', 'false');
       });
 
-      // Oculta todos os painéis
-      tabPanels.forEach((panel) => {
+      tabPanels.forEach(panel => {
         panel.classList.remove('active');
         panel.hidden = true;
       });
 
-      // Ativa o botão clicado e exibe o painel correspondente
       button.classList.add('active');
       button.setAttribute('aria-selected', 'true');
 
       const targetPanel = document.getElementById(targetId);
       if (targetPanel) {
-        targetPanel.classList.add('active');
         targetPanel.hidden = false;
+        // Aguarda um frame para disparar a animação CSS
+        requestAnimationFrame(() => targetPanel.classList.add('active'));
       }
     });
   });
 
   // =========================================================================
-  // 3. BOTÃO DE COPIAR CONFIGURAÇÕES IN-GAME
+  // 4. COPIAR CONFIGURAÇÕES IN-GAME
   // =========================================================================
-  const copyBtn = document.getElementById('copySettingsBtn');
+  const copyBtn    = document.getElementById('copySettingsBtn');
   const copyBtnText = document.getElementById('copyBtnText');
-  const copyToast = document.getElementById('copyToast');
-  const specsList = document.getElementById('ingameSpecsList');
+  const copyToast  = document.getElementById('copyToast');
+  const specsList  = document.getElementById('ingameSpecsList');
 
-  let toastTimeout;
+  let toastTimer;
 
   const showToast = (message) => {
     if (!copyToast) return;
     copyToast.textContent = message;
     copyToast.classList.add('show');
 
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      copyToast.classList.remove('show');
-    }, 3000);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => copyToast.classList.remove('show'), 3200);
   };
 
   if (copyBtn && specsList) {
     copyBtn.addEventListener('click', async () => {
-      // Lê dinamicamente os itens da tela para evitar divergência de dados
       const items = specsList.querySelectorAll('.spec-item');
-      const formattedLines = ['Configurações Fortnite — ctcxsz:'];
+      const lines = ['⚙️ Configurações Fortnite — ctcxsz:', ''];
 
-      items.forEach((item) => {
+      items.forEach(item => {
         const label = item.querySelector('.spec-name')?.textContent.trim();
         const value = item.querySelector('.spec-val')?.textContent.trim();
-        if (label && value) {
-          formattedLines.push(`• ${label}: ${value}`);
-        }
+        if (label && value) lines.push(`• ${label}: ${value}`);
       });
 
-      const textToCopy = formattedLines.join('\n');
+      const text = lines.join('\n');
+
+      const resetBtn = () => {
+        setTimeout(() => {
+          if (copyBtnText) copyBtnText.textContent = 'Copiar Configs';
+        }, 2500);
+      };
 
       try {
-        await navigator.clipboard.writeText(textToCopy);
-        if (copyBtnText) copyBtnText.textContent = 'Copiado!';
-        showToast('Configurações copiadas para a área de transferência!');
-
-        setTimeout(() => {
-          if (copyBtnText) copyBtnText.textContent = 'Copiar Configurações';
-        }, 2500);
-      } catch (err) {
-        // Fallback seguro caso o navegador bloqueie a API Clipboard (ex: HTTP local)
-        const textarea = document.createElement('textarea');
-        textarea.value = textToCopy;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
+        await navigator.clipboard.writeText(text);
+        if (copyBtnText) copyBtnText.textContent = '✓ Copiado!';
+        showToast('Configurações copiadas!');
+        resetBtn();
+      } catch {
+        // Fallback para HTTP local
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        Object.assign(ta.style, { position: 'fixed', opacity: '0', top: '0', left: '0' });
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
         try {
           document.execCommand('copy');
+          if (copyBtnText) copyBtnText.textContent = '✓ Copiado!';
           showToast('Configurações copiadas!');
-        } catch (fallbackErr) {
+        } catch {
           showToast('Não foi possível copiar automaticamente.');
         }
-        document.body.removeChild(textarea);
+        document.body.removeChild(ta);
+        resetBtn();
       }
     });
   }
 
   // =========================================================================
-  // 4. ANO ATUAL NO RODAPÉ
+  // 5. ANO DINÂMICO
   // =========================================================================
   const yearSpan = document.getElementById('currentYear');
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+  // =========================================================================
+  // 6. FADE-IN DE ENTRADA DAS SEÇÕES (IntersectionObserver)
+  // =========================================================================
+  const fadeTargets = document.querySelectorAll('.metric-card, .clip-card, .setup-card, .cta-box');
+
+  if ('IntersectionObserver' in window) {
+    // Define estado inicial invisível via JS (evita flash sem CSS extra)
+    fadeTargets.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Delay escalonado para cards em grid
+          setTimeout(() => {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    fadeTargets.forEach(el => observer.observe(el));
   }
+
 });
