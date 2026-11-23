@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // 6. FADE-IN DE ENTRADA DAS SEÇÕES (IntersectionObserver)
   // =========================================================================
-  const fadeTargets = document.querySelectorAll('.metric-card, .clip-card, .setup-card, .cta-box');
+  const fadeTargets = document.querySelectorAll('.metric-card, .clip-card, .setup-card, .cta-box, .earnings-clean-card, .org-card');
 
   if ('IntersectionObserver' in window) {
     // Define estado inicial invisível via JS (evita flash sem CSS extra)
@@ -192,6 +192,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.12 });
 
     fadeTargets.forEach(el => observer.observe(el));
+  }
+
+  // =========================================================================
+  // 7. PARTÍCULAS FNCS FLUTUANTES
+  // =========================================================================
+  const particlesContainer = document.getElementById('fncsParticles');
+
+  if (particlesContainer) {
+    const colors = [
+      'rgba(0, 229, 255, 0.5)',    // ciano
+      'rgba(145, 70, 255, 0.4)',   // roxo
+      'rgba(224, 64, 251, 0.35)',  // rosa
+      'rgba(255, 215, 0, 0.3)',    // dourado
+      'rgba(0, 229, 255, 0.3)',    // ciano suave
+    ];
+
+    for (let i = 0; i < 25; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 4 + 1.5;    // 1.5px a 5.5px
+      const left = Math.random() * 100;          // posição horizontal %
+      const duration = Math.random() * 15 + 10;  // 10s a 25s
+      const delay = Math.random() * 20;           // delay até 20s
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      particle.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${left}%;
+        background: ${color};
+        box-shadow: 0 0 ${size * 3}px ${color};
+        animation-duration: ${duration}s;
+        animation-delay: ${delay}s;
+      `;
+
+      particlesContainer.appendChild(particle);
+    }
+  }
+
+  // =========================================================================
+  // 8. FORMAS GEOMÉTRICAS FNCS FLUTUANTES
+  // =========================================================================
+  const shapesContainer = document.getElementById('fncsShapes');
+
+  if (shapesContainer) {
+    const shapeTypes = ['diamond', 'triangle', 'diamond', 'triangle'];
+
+    for (let i = 0; i < 8; i++) {
+      const shape = document.createElement('div');
+      const type = shapeTypes[i % shapeTypes.length];
+      shape.classList.add('fncs-shape', `fncs-shape--${type}`);
+
+      const top = Math.random() * 90 + 5;
+      const left = Math.random() * 90 + 5;
+      const duration = Math.random() * 30 + 25;
+      const delay = Math.random() * 15;
+      const scale = Math.random() * 0.6 + 0.5;
+
+      shape.style.cssText = `
+        top: ${top}%;
+        left: ${left}%;
+        animation-duration: ${duration}s;
+        animation-delay: ${delay}s;
+        transform: scale(${scale});
+        opacity: ${Math.random() * 0.04 + 0.015};
+      `;
+
+      shapesContainer.appendChild(shape);
+    }
   }
 
 });

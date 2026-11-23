@@ -2,19 +2,27 @@
    VARIÁVEIS GLOBAIS (:root)
    ========================================================================== */
 :root {
-  /* Paleta base */
-  --bg-primary:    #07080d;
-  --bg-secondary:  #0d0f18;
-  --bg-card:       #111422;
-  --bg-card-hover: #161a28;
-  --border-color:  rgba(255, 255, 255, 0.07);
-  --border-hover:  rgba(0, 229, 255, 0.4);
+  /* Paleta base — inspirada em cenários FNCS */
+  --bg-primary:    #060811;
+  --bg-secondary:  #0a0e1a;
+  --bg-card:       rgba(14, 18, 32, 0.85);
+  --bg-card-hover: rgba(22, 28, 48, 0.9);
+  --border-color:  rgba(255, 255, 255, 0.06);
+  --border-hover:  rgba(0, 229, 255, 0.45);
 
-  /* Accent principal */
+  /* Accent principal — Ciano FNCS */
   --accent:        #00e5ff;
   --accent-hover:  #00c8e0;
   --accent-dim:    rgba(0, 229, 255, 0.12);
   --accent-glow:   rgba(0, 229, 255, 0.25);
+
+  /* Accent secundário — Roxo FNCS */
+  --fncs-purple:      #9146ff;
+  --fncs-purple-glow: rgba(145, 70, 255, 0.2);
+  --fncs-pink:        #e040fb;
+  --fncs-pink-glow:   rgba(224, 64, 251, 0.15);
+  --fncs-gold:        #ffd700;
+  --fncs-gold-glow:   rgba(255, 215, 0, 0.12);
 
   /* Plataformas */
   --twitch:        #9146ff;
@@ -66,14 +74,613 @@ body {
   overflow-x: hidden;
 }
 
-/* Ruído de fundo sutil */
+/* ==========================================================================
+   FUNDO FNCS — Camadas decorativas globais
+   ========================================================================== */
+
+/* Camada 1: Grid hexagonal FNCS */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='rgba(0,229,255,0.045)' stroke-width='1'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='rgba(145,70,255,0.03)' stroke-width='0.5'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
+  opacity: 0.8;
+}
+
+/* Camada 2: Gradiente ambiente FNCS (feixes laterais de arena + ciano + roxo) */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    /* Feixe vertical lateral esquerdo (Ciano FNCS) */
+    radial-gradient(ellipse 350px 100% at 0% 50%, rgba(0, 229, 255, 0.12) 0%, transparent 70%),
+    /* Feixe vertical lateral direito (Roxo FNCS) */
+    radial-gradient(ellipse 350px 100% at 100% 50%, rgba(145, 70, 255, 0.12) 0%, transparent 70%),
+    /* Spots de iluminação central */
+    radial-gradient(ellipse 800px 600px at 20% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 500px at 80% 70%, rgba(145, 70, 255, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 400px 300px at 50% 95%, rgba(255, 215, 0, 0.035) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Camada 3: Partículas flutuantes FNCS */
+.fncs-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fncs-particles .particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: floatParticle linear infinite;
+  opacity: 0;
+}
+
+@keyframes floatParticle {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* Camada 4: Light streaks diagonais estilo FNCS */
+.fncs-streaks {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fncs-streaks::before,
+.fncs-streaks::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 300px;
+  animation: streak 8s linear infinite;
+  opacity: 0;
+}
+
+.fncs-streaks::before {
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  left: 15%;
+  animation-delay: 0s;
+  transform: rotate(25deg);
+}
+
+.fncs-streaks::after {
+  background: linear-gradient(to bottom, transparent, var(--fncs-purple), transparent);
+  right: 20%;
+  animation-delay: 4s;
+  transform: rotate(-20deg);
+}
+
+@keyframes streak {
+  0%   { top: -300px; opacity: 0; }
+  5%   { opacity: 0.4; }
+  50%  { opacity: 0.15; }
+  95%  { opacity: 0.3; }
+  100% { top: calc(100% + 300px); opacity: 0; }
+}
+
+/* Camada 5: Formas geométricas angulares FNCS (diamantes/triângulos flutuantes) */
+.fncs-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fncs-shape {
+  position: absolute;
+  border: 1px solid;
+  opacity: 0.04;
+  animation: driftShape linear infinite;
+}
+
+.fncs-shape--diamond {
+  width: 60px;
+  height: 60px;
+  border-color: var(--accent);
+  transform: rotate(45deg);
+}
+
+.fncs-shape--triangle {
+  width: 0;
+  height: 0;
+  border: none;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 52px solid rgba(145, 70, 255, 0.05);
+  background: none;
+}
+
+.fncs-shape--hexagon {
+  width: 50px;
+  height: 29px;
+  border-color: var(--fncs-pink);
+  position: absolute;
+}
+
+.fncs-shape--hexagon::before,
+.fncs-shape--hexagon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+}
+
+.fncs-shape--hexagon::before {
+  bottom: 100%;
+  border-bottom: 14px solid rgba(224, 64, 251, 0.05);
+}
+
+.fncs-shape--hexagon::after {
+  top: 100%;
+  border-top: 14px solid rgba(224, 64, 251, 0.05);
+}
+
+@keyframes driftShape {
+  0%   { transform: rotate(0deg) translateY(0) translateX(0); }
+  25%  { transform: rotate(90deg) translateY(-30px) translateX(15px); }
+  50%  { transform: rotate(180deg) translateY(0) translateX(-15px); }
+  75%  { transform: rotate(270deg) translateY(30px) translateX(10px); }
+  100% { transform: rotate(360deg) translateY(0) translateX(0); }
+}
+
+/* ==========================================================================
+   ELEMENTOS REAIS FNCS DE FUNDO (Preenchem TODO o site na camada de fundo)
+   ========================================================================== */
+.fncs-bg-showcase {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fncs-bg-cutout {
+  position: absolute;
+  pointer-events: none;
+}
+
+.fncs-bg-cutout img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Escudo Principal FNCS (Marca d'água no fundo central de todo o site) */
+.fncs-bg-shield-main {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(380px, 50vw, 750px);
+  opacity: 0.15;
+  filter: drop-shadow(0 0 60px rgba(0, 229, 255, 0.35));
+  animation: floatShield 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatShield {
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -52%) scale(1.04); }
+}
+
+/* Troféu / Asas FNCS (Lateral Esquerda no fundo contínuo) */
+.fncs-bg-trophy-left {
+  top: 15%;
+  left: -20px;
+  width: clamp(220px, 24vw, 380px);
+  opacity: 0.18;
+  transform: rotate(10deg);
+  filter: drop-shadow(0 0 45px rgba(0, 229, 255, 0.28));
+  animation: floatLeft 9s ease-in-out infinite alternate;
+}
+
+@keyframes floatLeft {
+  0%   { transform: rotate(10deg) translateY(0); }
+  100% { transform: rotate(14deg) translateY(-25px); }
+}
+
+/* Coroa de Vitória FNCS (Lateral Direita no fundo contínuo) */
+.fncs-bg-crown-right {
+  top: 18%;
+  right: -25px;
+  width: clamp(200px, 22vw, 350px);
+  opacity: 0.2;
+  transform: rotate(-10deg);
+  filter: drop-shadow(0 0 45px rgba(255, 215, 0, 0.28));
+  animation: floatRight 10s ease-in-out infinite alternate;
+}
+
+@keyframes floatRight {
+  0%   { transform: rotate(-10deg) translateY(0); }
+  100% { transform: rotate(-6deg) translateY(-22px); }
+}
+
+/* Segunda Coroa na lateral esquerda inferior */
+.fncs-bg-crown-lower {
+  bottom: 8%;
+  left: -20px;
+  width: clamp(180px, 20vw, 320px);
+  opacity: 0.16;
+  transform: rotate(16deg);
+  filter: drop-shadow(0 0 40px rgba(224, 64, 251, 0.25));
+  animation: floatLeft 12s ease-in-out 1s infinite alternate;
+}
+
+/* Segundo Escudo na lateral direita inferior */
+.fncs-bg-shield-lower {
+  bottom: 6%;
+  right: -30px;
+  width: clamp(220px, 26vw, 420px);
+  opacity: 0.16;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 0 50px rgba(145, 70, 255, 0.28));
+  animation: floatRight 11s ease-in-out 2s infinite alternate;
+}
+
+/* Garante que todo o conteúdo do site fique na PRIMEIRA CAMADA (nítido e legível) */
+.hero,
+.section,
+.navbar,
+.footer {
+  position: relative;
+  z-index: 2;
+}
+
+.metric-card,
+.earnings-clean-card,
+.org-card,
+.clip-card,
+.setup-card,
+.cta-box {
+  position: relative;
+  z-index: 3;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ==========================================================================
+   EARNINGS (TOTAL DE EARNINGS LIMPO: APENAS TÍTULO E VALOR)
+   ========================================================================== */
+.earnings-clean-card {
+  max-width: 680px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(20, 24, 40, 0.94) 0%, rgba(12, 16, 30, 0.98) 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 2.4rem 2rem;
+  box-shadow: 
+    0 16px 45px rgba(0, 0, 0, 0.65), 
+    0 0 35px rgba(255, 215, 0, 0.18),
+    inset 0 0 25px rgba(255, 215, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.earnings-clean-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 215, 0, 0.7);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 45px rgba(255, 215, 0, 0.25);
+}
+
+.earnings-clean-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffd700, #00e5ff, transparent);
+}
+
+.earnings-clean-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.earnings-clean-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--fncs-gold);
+  text-transform: uppercase;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+}
+
+.earnings-clean-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.earnings-clean-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.earnings-clean-value {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  color: var(--fncs-gold);
+  background: linear-gradient(135deg, #ffffff 15%, #ffd700 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.35));
+}
+
+/* ==========================================================================
+   ORGANIZAÇÃO ATUAL (COMET — ROXO E BRANCO) & HISTÓRICO
+   ========================================================================== */
+.orgs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+@media (min-width: 860px) {
+  .orgs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.org-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: var(--transition);
+}
+
+.org-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Card COMET: Identidade visual Roxa e Branca */
+.org-card-comet {
+  background: linear-gradient(145deg, rgba(32, 12, 54, 0.94) 0%, rgba(18, 7, 32, 0.98) 100%);
+  border: 1.5px solid #a855f7;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 35px rgba(168, 85, 247, 0.3);
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.org-card-comet:hover {
+  border-color: #c084fc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 45px rgba(168, 85, 247, 0.45);
+}
+
+.org-card-comet::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffffff, #c084fc, transparent);
+}
+
+.comet-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #f3e8ff;
+  background: rgba(168, 85, 247, 0.22);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+}
+
+.comet-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c084fc;
+  box-shadow: 0 0 10px #c084fc;
+  animation: pulse 2s infinite;
+}
+
+.comet-clean-display {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 0;
+}
+
+.comet-logo-wrap {
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(168, 85, 247, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(168, 85, 247, 0.35);
+  transition: transform 0.4s ease;
+}
+
+.org-card-comet:hover .comet-logo-wrap {
+  transform: scale(1.06) rotate(3deg);
+}
+
+.comet-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.comet-info-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.comet-org-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #c084fc;
+  text-transform: uppercase;
+}
+
+.comet-org-name {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 3px;
+  line-height: 1.1;
+  text-shadow: 0 0 24px rgba(168, 85, 247, 0.6);
+}
+
+.comet-org-sub {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e9d5ff;
+  letter-spacing: 0.5px;
+}
+
+/* Card Histórico */
+.org-card-badge.history {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.history-title {
+  font-size: 1.15rem;
+  margin-bottom: 0.3rem;
+}
+
+.history-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border-color);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -1.65rem;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.timeline-dot.comet-dot {
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7;
+}
+
+.timeline-dot.past {
+  background: var(--text-muted);
+  box-shadow: none;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+
+.timeline-org-name {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.timeline-period {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.timeline-period.current {
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.timeline-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  display: block;
+}
+
+.timeline-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  display: block;
 }
 
 h1, h2, h3, .logo {
@@ -321,41 +928,193 @@ img { max-width: 100%; display: block; }
 .nav-link:hover::after { width: 100%; }
 
 /* ==========================================================================
-   HERO
+   HERO & BANNER OFICIAL
    ========================================================================== */
 .hero {
-  padding: calc(var(--navbar-h) + 4.5rem) 0 5rem;
+  padding: calc(var(--navbar-h) + 2rem) 0 4.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-/* Orbs de fundo */
-.hero::before,
+/* Orbs FNCS na hero — ciano, roxo, rosa, dourado */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 30% 40%, rgba(0, 229, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(145, 70, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 70%, rgba(224, 64, 251, 0.05) 0%, transparent 50%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+
 .hero::after {
   content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
+  width: 500px;
+  height: 500px;
+  bottom: -80px;
+  right: -100px;
+  background:
+    radial-gradient(circle, rgba(145, 70, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.04) 0%, transparent 50%);
+  filter: blur(50px);
   pointer-events: none;
   z-index: 0;
+  animation: heroGlow 6s ease-in-out 2s infinite alternate;
 }
 
-.hero::before {
-  width: 600px;
-  height: 600px;
-  top: -120px;
+@keyframes heroGlow {
+  0%   { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+}
+
+/* Container do Banner Oficial (Enquadrado, focado e contido) */
+.hero-banner-container {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto 0 auto;
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-banner-card {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #090c16;
+  border: 1px solid rgba(0, 229, 255, 0.28);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.75),
+    0 0 30px rgba(0, 229, 255, 0.18),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+@media (min-width: 640px) {
+  .hero-banner-card {
+    height: 280px;
+  }
+}
+
+@media (min-width: 900px) {
+  .hero-banner-card {
+    height: 320px;
+  }
+}
+
+.hero-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-banner-card:hover .hero-banner-img {
+  transform: scale(1.03);
+}
+
+.hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 8, 17, 0.15) 0%,
+    rgba(6, 8, 17, 0.25) 55%,
+    rgba(6, 8, 17, 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+/* Tag de transmissão / FNCS no banner */
+.hero-banner-tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(8, 11, 20, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.tag-live-dot {
+  width: 7px;
+  height: 7px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+}
+
+/* Cantoneiras estilizadas gamer no banner */
+.hero-banner-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-banner-corner.top-left {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+
+.hero-banner-corner.bottom-right {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 2px solid var(--fncs-purple);
+  border-right: 2px solid var(--fncs-purple);
+}
+
+/* Brasão FNCS decorativo logo após o banner */
+.fncs-backdrop-crest {
+  position: absolute;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(0,229,255,0.09) 0%, transparent 70%);
+  width: 440px;
+  height: 440px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 25px rgba(0, 229, 255, 0.15));
 }
 
-.hero::after {
-  width: 400px;
-  height: 400px;
-  bottom: 0;
-  right: -100px;
-  background: radial-gradient(circle, rgba(145,70,255,0.07) 0%, transparent 70%);
+.fncs-crest-svg {
+  width: 100%;
+  height: 100%;
+  animation: crestPulse 7s ease-in-out infinite alternate;
+}
+
+@keyframes crestPulse {
+  0%   { transform: rotate(0deg) scale(0.96); opacity: 0.45; }
+  100% { transform: rotate(4deg) scale(1.04); opacity: 0.75; }
 }
 
 .hero-content {
@@ -364,13 +1123,15 @@ img { max-width: 100%; display: block; }
   align-items: center;
   max-width: 700px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
-/* Avatar */
+/* Avatar (Sobrepondo com perfeição a base do banner) */
 .avatar-wrapper {
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-top: -64px;
+  margin-bottom: 1.25rem;
+  z-index: 5;
 }
 
 .avatar-ring {
@@ -390,6 +1151,7 @@ img { max-width: 100%; display: block; }
   background: conic-gradient(var(--accent), var(--twitch), var(--accent));
   animation: spin 6s linear infinite;
   z-index: 0;
+  box-shadow: 0 0 24px var(--accent-glow);
 }
 
 .avatar-ring::after {
@@ -591,7 +1353,7 @@ img { max-width: 100%; display: block; }
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), var(--fncs-purple), transparent);
   opacity: 0;
   transition: opacity var(--transition);
 }
@@ -800,8 +1562,8 @@ img { max-width: 100%; display: block; }
    CTA / PARCERIAS
    ========================================================================== */
 .cta-box {
-  background: linear-gradient(145deg, #111828 0%, #0d1420 50%, #0a0f1a 100%);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(145deg, rgba(14,18,32,0.95) 0%, rgba(10,16,30,0.95) 50%, rgba(8,12,24,0.95) 100%);
+  border: 1px solid rgba(145, 70, 255, 0.15);
   border-radius: var(--radius-xl);
   padding: 3.5rem 1.5rem;
   text-align: center;
@@ -817,7 +1579,9 @@ img { max-width: 100%; display: block; }
   transform: translateX(-50%);
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 65%);
+  background:
+    radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 60% 40%, rgba(145, 70, 255, 0.06) 0%, transparent 55%);
   pointer-events: none;
 }
 
@@ -826,9 +1590,11 @@ img { max-width: 100%; display: block; }
   position: absolute;
   bottom: -20px;
   right: -20px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(145,70,255,0.08) 0%, transparent 65%);
+  width: 250px;
+  height: 250px;
+  background:
+    radial-gradient(circle, rgba(224, 64, 251, 0.08) 0%, transparent 55%),
+    radial-gradient(circle at 40% 60%, rgba(255, 215, 0, 0.04) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -988,7 +1754,7 @@ img { max-width: 100%; display: block; }
     padding: 0.4rem 0.75rem;
   }
 
-  .metrics-grid { grid-template-columns: repeat(4, 1fr); }
+  .metrics-grid { grid-template-columns: repeat(3, 1fr); }
   .clips-grid   { grid-template-columns: repeat(3, 1fr); }
 
   .footer-content {
@@ -1016,4 +1782,63 @@ img { max-width: 100%; display: block; }
 /* Redução de movimento */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .fncs-particles, .fncs-streaks, .fncs-shapes { display: none; }
+}
+
+/* ==========================================================================
+   ELEMENTOS FNCS — Estilos adicionais de seção
+   ========================================================================== */
+
+/* Glow de borda nas seções ao rolar */
+#metricas { border-image: linear-gradient(to right, transparent, var(--accent-dim), transparent) 1; }
+#clipes   { border-image: linear-gradient(to right, transparent, var(--fncs-purple-glow), transparent) 1; }
+#setup    { border-image: linear-gradient(to right, transparent, var(--fncs-pink-glow), transparent) 1; }
+
+/* Badge do Código de Criador */
+.creator-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.2rem;
+  background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(145,70,255,0.08) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--fncs-gold);
+  margin-top: 1.5rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  cursor: default;
+}
+
+.creator-code:hover {
+  border-color: rgba(255, 215, 0, 0.45);
+  box-shadow: 0 0 24px var(--fncs-gold-glow);
+  transform: translateY(-2px);
+}
+
+.creator-code svg { flex-shrink: 0; }
+
+/* Texto "FNCS" decorativo no rodapé */
+.footer {
+  background:
+    linear-gradient(to top, rgba(6,8,17,1) 0%, transparent 100%),
+    linear-gradient(to right, transparent, rgba(0,229,255,0.015), rgba(145,70,255,0.015), transparent);
+}
+
+/* Divisores de seção FNCS com gradiente ciano-roxo */
+.section + .section::before {
+  background: linear-gradient(90deg, transparent, var(--accent-dim), var(--fncs-purple-glow), transparent);
+  height: 1px;
+}
+
+/* Clip card — borda FNCS gradient on hover */
+.clip-card:hover {
+  border-color: transparent;
+  background-image: linear-gradient(var(--bg-card), var(--bg-card)),
+                    linear-gradient(135deg, var(--accent), var(--fncs-purple));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35), 0 0 20px var(--accent-dim);
 }

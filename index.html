@@ -36,6 +36,38 @@
 </head>
 <body>
 
+  <!-- ==================== CAMADAS DECORATIVAS FNCS ==================== -->
+  <!-- Partículas flutuantes -->
+  <div class="fncs-particles" aria-hidden="true" id="fncsParticles"></div>
+  <!-- Light streaks diagonais -->
+  <div class="fncs-streaks" aria-hidden="true"></div>
+  <!-- Formas geométricas flutuantes -->
+  <div class="fncs-shapes" aria-hidden="true" id="fncsShapes"></div>
+
+  <!-- ELEMENTOS REAIS DA FNCS NO FUNDO (Escudo, Coroas e Troféu recortados em alta definição) -->
+  <div class="fncs-bg-showcase" aria-hidden="true">
+    <!-- Escudo Central FNCS (Grande marca d'água no fundo da hero e topo) -->
+    <div class="fncs-bg-cutout fncs-bg-shield-main">
+      <img src="assets/fncs_shield_cutout.png" alt="Escudo Oficial FNCS" />
+    </div>
+    <!-- Troféu / Asas FNCS na lateral esquerda -->
+    <div class="fncs-bg-cutout fncs-bg-trophy-left">
+      <img src="assets/fncs_trophy_cutout.png" alt="Troféu FNCS" />
+    </div>
+    <!-- Coroa de Vitória FNCS na lateral direita -->
+    <div class="fncs-bg-cutout fncs-bg-crown-right">
+      <img src="assets/fncs_crown_cutout.png" alt="Coroa de Vitória FNCS" />
+    </div>
+    <!-- Segunda Coroa flutuante na seção central/inferior -->
+    <div class="fncs-bg-cutout fncs-bg-crown-lower">
+      <img src="assets/fncs_crown_cutout.png" alt="Coroa FNCS Lateral" />
+    </div>
+    <!-- Escudo FNCS flutuante na lateral esquerda inferior -->
+    <div class="fncs-bg-cutout fncs-bg-shield-lower">
+      <img src="assets/fncs_shield_cutout.png" alt="Escudo FNCS Lateral" />
+    </div>
+  </div>
+
   <!-- ==================== NAVBAR ==================== -->
   <header class="navbar" id="topo">
     <div class="container navbar-container">
@@ -53,11 +85,13 @@
       <!-- Links de Navegação -->
       <nav class="nav-menu" id="navMenu" aria-label="Navegação Principal">
         <ul class="nav-list">
-          <li><a href="#sobre"     class="nav-link">Sobre</a></li>
-          <li><a href="#metricas"  class="nav-link">Alcance</a></li>
-          <li><a href="#clipes"    class="nav-link">Clipes</a></li>
-          <li><a href="#setup"     class="nav-link">Setup</a></li>
-          <li><a href="#parcerias" class="nav-link">Parcerias</a></li>
+          <li><a href="#sobre"        class="nav-link">Sobre</a></li>
+          <li><a href="#metricas"     class="nav-link">Alcance</a></li>
+          <li><a href="#earnings"     class="nav-link">Premiação ($)</a></li>
+          <li><a href="#organizacoes" class="nav-link">Organizações</a></li>
+          <li><a href="#clipes"       class="nav-link">Clipes</a></li>
+          <li><a href="#setup"        class="nav-link">Setup</a></li>
+          <li><a href="#parcerias"    class="nav-link">Parcerias</a></li>
         </ul>
         <a href="#parcerias" class="btn btn-primary btn-sm nav-cta">Contato Comercial</a>
       </nav>
@@ -67,14 +101,35 @@
   <main>
     <!-- ==================== HERO ==================== -->
     <section class="hero" id="sobre">
+
+      <!-- Banner Oficial Centralizado (Contido, sem vazar para fora) -->
+      <div class="hero-banner-container">
+        <div class="hero-banner-card">
+          <img
+            src="assets/banner.jpeg"
+            onerror="this.src='https://static-cdn.jtvnw.net/jtv_user_pictures/8de52fde-8455-4f62-99da-3528f4e26ae5-profile_banner-480.jpeg'"
+            alt="Banner Oficial do canal ctcxsz"
+            class="hero-banner-img"
+          >
+          <div class="hero-banner-overlay"></div>
+          <div class="hero-banner-tag">
+            <span class="tag-live-dot"></span>
+            <span>FNCS COMPETITIVE // TWITCH STREAMER</span>
+          </div>
+          <div class="hero-banner-corner top-left"></div>
+          <div class="hero-banner-corner bottom-right"></div>
+        </div>
+      </div>
+
       <div class="container hero-content">
 
-        <!-- Avatar com anel animado -->
+        <!-- Avatar com anel animado sobrepondo suavemente a base do banner -->
         <div class="avatar-wrapper">
           <div class="avatar-ring">
-            <!-- Troque o src pela foto real: assets/avatar-ctcxsz.png -->
+            <!-- Foto de perfil oficial da Twitch -->
             <img
-              src="https://placehold.co/136x136/111422/00e5ff?text=ctcxsz"
+              src="assets/avatar.png"
+              onerror="this.src='https://static-cdn.jtvnw.net/jtv_user_pictures/ddae5685-484f-41e5-abc8-7d737d84f361-profile_image-300x300.png'"
               alt="Foto de perfil oficial do streamer ctcxsz"
               class="hero-avatar"
               width="136"
@@ -141,6 +196,14 @@
             <path d="M12 5v14M5 12l7 7 7-7"/>
           </svg>
         </div>
+
+        <!-- Badge Código de Criador Epic Games -->
+        <div class="creator-code" title="Use o código ctcxsz na Loja do Fortnite!">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          Código de Criador: <span style="color: #fff;">ctcxsz</span>
+        </div>
       </div>
     </section>
 
@@ -167,15 +230,109 @@
           </article>
 
           <article class="metric-card">
-            <span class="metric-label">Público Principal</span>
-            <strong class="metric-value">[FAIXA ETÁRIA]</strong>
-            <span class="metric-detail">Brasil • Fãs de Fortnite &amp; Esports</span>
-          </article>
-
-          <article class="metric-card">
             <span class="metric-label">Frequência de Lives</span>
             <strong class="metric-value">[DIAS / HORAS]</strong>
             <span class="metric-detail">Transmissões ao vivo na Twitch</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EARNINGS / PREMIAÇÃO ($ DOL) ==================== -->
+    <section class="section" id="earnings">
+      <div class="container">
+        <div class="earnings-clean-card">
+          <div class="earnings-clean-content">
+            <div class="earnings-clean-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.93V18h-2v-1.07c-1.78-.4-3.03-1.84-3.03-3.68 0-2.07 1.5-3.06 3.53-3.66 1.74-.52 2.5-.96 2.5-1.92 0-.82-.71-1.39-1.8-1.39-1.22 0-2 .63-2.18 1.72l-1.63-.68C8.75 6.8 9.77 5.76 11 5.37V4h2v1.37c1.69.41 2.92 1.77 2.92 3.49 0 2.22-1.62 3.23-3.73 3.82-1.63.46-2.3 1-2.3 1.85 0 .91.81 1.47 1.91 1.47 1.41 0 2.22-.75 2.47-1.87l1.64.69c-.41 1.63-1.61 2.76-2.91 3.18z"/>
+              </svg>
+              <span>PREMIAÇÕES OFICIAIS</span>
+            </div>
+            <div class="earnings-clean-main">
+              <span class="earnings-clean-title">Total de Earnings:</span>
+              <strong class="earnings-clean-value">$ [100] USD</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ORGANIZAÇÕES & CARREIRA ==================== -->
+    <section class="section" id="organizacoes">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Esports &amp; Roster</span>
+          <h2 class="section-title">Organização Atual &amp; Histórico</h2>
+          <p class="section-subtitle">Trajetória competitiva no cenário de Fortnite, organização representada e histórico.</p>
+        </div>
+
+        <div class="orgs-grid">
+          <!-- Card: Organização Atual (COMET - Roxo e Branco, Limpo e Direto) -->
+          <article class="org-card org-card-comet">
+            <div class="comet-card-badge">
+              <span class="comet-pulse-dot"></span>
+              ORGANIZAÇÃO ATUAL
+            </div>
+            
+            <div class="comet-clean-display">
+              <div class="comet-logo-wrap">
+                <img src="assets/comet_logo.svg" alt="Logo Oficial COMET Esports" class="comet-logo-img">
+              </div>
+              <div class="comet-info-wrap">
+                <span class="comet-org-tag">ORG ATUAL</span>
+                <h3 class="comet-org-name">COMET</h3>
+                <span class="comet-org-sub">COMET ESPORTS // FORTNITE ROSTER</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card: Histórico de Organizações -->
+          <article class="org-card org-card-history">
+            <div class="org-card-badge history">
+              HISTÓRICO DE EQUIPES
+            </div>
+
+            <h3 class="history-title">Times &amp; Equipes Representadas</h3>
+            <p class="history-subtitle">Organizações pelas quais já competiu no cenário profissional:</p>
+
+            <div class="timeline-list">
+              <!-- Item 1 do Histórico: COMET (Atual) -->
+              <div class="timeline-item">
+                <div class="timeline-dot comet-dot"></div>
+                <div class="timeline-body">
+                  <div class="timeline-header">
+                    <strong class="timeline-org-name">COMET Esports</strong>
+                    <span class="timeline-period current">ATUAL</span>
+                  </div>
+                  <span class="timeline-desc">Line-up Competitiva de Fortnite • Roster Oficial</span>
+                </div>
+              </div>
+
+              <!-- Item 2 do Histórico: DIVINE -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-body">
+                  <div class="timeline-header">
+                    <strong class="timeline-org-name">DIVINE Esports</strong>
+                    <span class="timeline-period">2024</span>
+                  </div>
+                  <span class="timeline-desc">Divisão Competitiva de Fortnite • Torneios FNCS &amp; Cash Cups</span>
+                </div>
+              </div>
+
+              <!-- Item 3 do Histórico -->
+              <div class="timeline-item">
+                <div class="timeline-dot past"></div>
+                <div class="timeline-body">
+                  <div class="timeline-header">
+                    <strong class="timeline-org-name">[INSERIR OUTRA ORG PASSADA]</strong>
+                    <span class="timeline-period">[ANO/TEMPORADA]</span>
+                  </div>
+                  <span class="timeline-desc">Jogador Competitivo / Creator • [INSERIR DETALHES]</span>
+                </div>
+              </div>
+            </div>
           </article>
         </div>
       </div>
