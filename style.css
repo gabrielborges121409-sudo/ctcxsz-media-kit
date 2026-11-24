@@ -37,8 +37,8 @@
   --text-on-accent: #040609;
 
   /* Fontes */
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Inter', sans-serif;
+  --font-heading: 'Josefin Sans', 'Urbanist', sans-serif;
+  --font-body:    'Urbanist', 'Josefin Sans', sans-serif;
 
   /* Dimensões */
   --radius-xs: 6px;
